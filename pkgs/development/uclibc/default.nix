@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
-  name = "uClibc-0.9.28";
+  name = "uClibc-0.9.28.3";
   src = fetchurl {
-    url = http://www.uclibc.org/downloads/snapshots/uClibc-20060302.tar.bz2;
-    md5 = "3502da5973851a63625791545d459734";
-    #url = http://www.uclibc.org/downloads/uClibc-0.9.28.tar.bz2;
-    #md5 = "1ada58d919a82561061e4741fb6abd29";
+    #url = http://www.uclibc.org/downloads/snapshots/uClibc-20060302.tar.bz2;
+    #md5 = "3502da5973851a63625791545d459734";
+    url = http://www.uclibc.org/downloads/uClibc-0.9.28.3.tar.bz2;
+    sha256 = "18a7nmshl7458xsb64jix5zxq6v6nz3zy8z0rxbp03h6svddb1hx";
   };
   config = if cross == "mips-linux"
              then ./config-mips-linux
