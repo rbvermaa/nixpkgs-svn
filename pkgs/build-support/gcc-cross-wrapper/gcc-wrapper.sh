@@ -4,11 +4,11 @@ if test -n "$NIX_GCC_WRAPPER_START_HOOK"; then
     source "$NIX_GCC_WRAPPER_START_HOOK"
 fi
 
-if test -z "$NIX_GLIBC_FLAGS_SET"; then
-    source @out@/nix-support/add-flags
+if test -z "$NIX_GCC_WRAPPER_FLAGS_SET"; then
+    source @out@/nix-support/add-flags.sh
 fi
 
-source @out@/nix-support/utils
+source @out@/nix-support/utils.sh
 
 
 # Figure out if linker flags should be passed.  GCC prints annoying
@@ -91,6 +91,15 @@ if test "$dontLink" != "1"; then
         extraAfter=(${extraAfter[@]} $NIX_CFLAGS_STRIP)
     fi
 fi
+
+# As a very special hack, if the arguments are just `-v', then don't
+# add anything.  This is to prevent `gcc -v' (which normally prints
+# out the version number and returns exit code 0) from printing out
+# `No input files specified' and returning exit code 1.
+if test "$*" = "-v"; then
+    extraAfter=()
+    extraBefore=()
+fi    
 
 # Optionally print debug info.
 if test "$NIX_DEBUG" = "1"; then

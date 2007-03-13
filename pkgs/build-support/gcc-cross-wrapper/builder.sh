@@ -1,36 +1,50 @@
 source $stdenv/setup
 
 
-# Force gcc to use ld-wrapper.sh when calling ld.
-cflagsCompile="-B$out/bin/"
+ensureDir $out/bin
+ensureDir $out/nix-support
+
 
 if test -z "$nativeLibc"; then
-    # The "-B$glibc/lib/" flag is a quick hack to force gcc to link
+    dynamicLinker="$libc/lib/$dynamicLinker"
+    echo $dynamicLinker > $out/nix-support/dynamic-linker
+
+    # The "-B$libc/lib/" flag is a quick hack to force gcc to link
     # against the crt1.o from our own glibc, rather than the one in
-    # /usr/lib.  The real solution is of course to prevent those paths
-    # from being used by gcc in the first place.
+    # /usr/lib.  (This is only an issue when using an `impure'
+    # compiler/linker, i.e., one that searches /usr/lib and so on.)
+    echo "-B$libc/lib/ -isystem $libc/include" > $out/nix-support/libc-cflags
+    
+    echo "-L$libc/lib" > $out/nix-support/libc-ldflags
+
     # The dynamic linker is passed in `ldflagsBefore' to allow
     # explicit overrides of the dynamic linker by callers to gcc/ld
     # (the *last* value counts, so ours should come first).
-    cflagsCompile="$cflagsCompile -B$libc/usr/lib/ -isystem $libc/usr/include"
-    ldflags="$ldflags -L$libc/usr/lib"
-    #ldflagsBefore="-dynamic-linker $libc/lib/ld-linux.so.2"
-    ldflagsBefore="-dynamic-linker $libc/lib/ld-uClibc.so.0"
+    echo "-dynamic-linker $dynamicLinker" > $out/nix-support/libc-ldflags-before
 fi
 
 if test -n "$nativeTools"; then
     gccPath="$nativePrefix/bin"
     ldPath="$nativePrefix/bin"
 else
-    ldflags="$ldflags -L$gcc/lib"
+    if test -e "$gcc/lib64"; then
+        gccLDFlags="$gccLDFlags -L$gcc/lib64"
+    fi
+    gccLDFlags="$gccLDFlags -L$gcc/lib"
+    echo "$gccLDFlags" > $out/nix-support/gcc-ldflags
+
+    # GCC shows $gcc/lib in `gcc -print-search-dirs', but not
+    # $gcc/lib64 (even though it does actually search there...)..
+    # This confuses libtool.  So add it to the compiler tool search
+    # path explicitly.
+    if test -e "$gcc/lib64"; then
+        gccCFlags="$gccCFlags -B$gcc/lib64"
+    fi
+    echo "$gccCFlags" > $out/nix-support/gcc-cflags
+    
     gccPath="$gcc/bin"
     ldPath="$binutils/bin"
 fi
-
-
-mkdir $out
-mkdir $out/bin
-mkdir $out/nix-support
 
 
 doSubstitute() {
@@ -43,10 +57,6 @@ doSubstitute() {
         --subst-var "gccProg" \
         --subst-var "binutils" \
         --subst-var "libc" \
-        --subst-var "cflagsCompile" \
-        --subst-var "cflagsLink" \
-        --subst-var "ldflags" \
-        --subst-var "ldflagsBefore" \
         --subst-var-by "ld" "$ldPath/ld"
 }
 
@@ -92,8 +102,8 @@ chmod +x "$out/bin/$cross-ld"
 test -n "$gcc" && echo $gcc > $out/nix-support/orig-gcc
 test -n "$libc" && echo $libc > $out/nix-support/orig-libc
 
-doSubstitute "$addFlags" "$out/nix-support/add-flags"
+doSubstitute "$addFlags" "$out/nix-support/add-flags.sh"
 
 doSubstitute "$setupHook" "$out/nix-support/setup-hook"
 
-cp -p $utils $out/nix-support/utils
+cp -p $utils $out/nix-support/utils.sh
