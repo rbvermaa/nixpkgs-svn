@@ -133,7 +133,7 @@ UCLIBC_HAS_GLOB=y
 # Library Installation Options
 #
 RUNTIME_PREFIX="$(out)/"
-DEVEL_PREFIX="$(out)/usr/"
+DEVEL_PREFIX="$(out)/"
 
 #
 # uClibc security related options
