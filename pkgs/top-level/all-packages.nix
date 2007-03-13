@@ -616,11 +616,11 @@ rec {
     profiledCompiler = true;
   });
 
-  gcc40arm = import ../build-support/gcc-cross-wrapper {
+  gcc41arm = import ../build-support/gcc-cross-wrapper {
     nativeTools = false;
     nativeLibc = false;
     cross = "arm-linux";
-    gcc = import ../development/compilers/gcc-4.0-cross {
+    gcc = import ../development/compilers/gcc-4.1-cross {
       inherit fetchurl stdenv noSysDirs;
       langF77 = false;
       langCC = false;
@@ -633,18 +633,18 @@ rec {
     inherit stdenv;
   };
 
-  gcc40mips = import ../build-support/gcc-cross-wrapper {
+  gcc41mips = import ../build-support/gcc-cross-wrapper {
     nativeTools = false;
     nativeLibc = false;
     cross = "mips-linux";
-    gcc = gcc40mipsboot;
+    gcc = gcc41mipsboot;
     #inherit (stdenv.gcc) libc;
     libc = uclibcMips;
     binutils = binutilsMips;
     inherit stdenv;
   };
 
-  gcc40mipsboot = import ../development/compilers/gcc-4.0-cross {
+  gcc41mipsboot = import ../development/compilers/gcc-4.1-cross {
     inherit fetchurl stdenv noSysDirs;
     langF77 = false;
     langCC = false;
@@ -2292,7 +2292,7 @@ rec {
     inherit fetchurl stdenv mktemp;
     kernelHeadersCross = kernelHeadersArm;
     binutilsCross = binutilsArm;
-    gccCross = gcc40arm;
+    gccCross = gcc41arm;
     cross = "arm-linux";
   };
 
@@ -2300,7 +2300,7 @@ rec {
     inherit fetchurl stdenv mktemp;
     kernelHeadersCross = kernelHeadersMips;
     binutilsCross = binutilsMips;
-    gccCross = gcc40mipsboot;
+    gccCross = gcc41mipsboot;
     cross = "mips-linux";
   };
 
