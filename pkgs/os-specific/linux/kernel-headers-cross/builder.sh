@@ -17,6 +17,8 @@ installPhase() {
        arch=arm
     elif test $cross = "mips-linux"; then
            arch=mips
+    elif test $cross = "mipsel-linux"; then
+           arch=mips
     elif test $cross = "sparc-linux"; then
            arch=sparc
     elif test $cross = "powerpc-linux"; then
