@@ -1182,6 +1182,15 @@ rec {
     inherit fetchurl stdenv;
   };
 
+  atermMips = import ../development/libraries/aterm {
+    inherit fetchurl;
+    stdenv = addAttrsToDerivation {
+      CC = "mips-linux-gcc";
+      configureFlags = "--target=mips-linux --host=i686-linux";
+      preBuild = "touch test/terms.c test/terms.h";
+    } (overrideInStdenv (makeStaticBinaries stdenv) [gcc41mips]);
+  };
+
   aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
     inherit fetchurl stdenv;
   };
