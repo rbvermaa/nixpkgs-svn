@@ -2,6 +2,7 @@ source $stdenv/setup
 
 
 ensureDir $out/bin
+ensureDir $out/$cross
 ensureDir $out/nix-support
 
 
@@ -57,7 +58,7 @@ doSubstitute() {
         --subst-var "gccProg" \
         --subst-var "binutils" \
         --subst-var "libc" \
-        --subst-var-by "ld" "$ldPath/ld"
+        --subst-var-by "ld" "$ldPath/$cross-ld"
 }
 
 
@@ -77,14 +78,14 @@ mkGccWrapper() {
     chmod +x "$dst"
 }
 
-mkGccWrapper $out/bin/$cross-gcc $gccPath/$cross-gcc
-#ln -s gcc $out/bin/cc
+mkGccWrapper $out/$cross/gcc $gccPath/$cross-gcc
+ln -s $out/$cross/gcc $out/bin/$cross-gcc
 
-mkGccWrapper $out/bin/g++ $gccPath/g++
-ln -s g++ $out/bin/c++
+#mkGccWrapper $out/bin/g++ $gccPath/g++
+#ln -s g++ $out/bin/c++
 
-mkGccWrapper $out/bin/g77 $gccPath/g77
-ln -s g77 $out/bin/f77
+#mkGccWrapper $out/bin/g77 $gccPath/g77
+#ln -s g77 $out/bin/f77
 
 ln -s $binutils/bin/$cross-ar $out/bin/$cross-ar
 ln -s $binutils/bin/$cross-as $out/bin/$cross-as
@@ -93,7 +94,8 @@ ln -s $binutils/bin/$cross-strip $out/bin/$cross-strip
 
 
 # Make a wrapper around the linker.
-doSubstitute "$ldWrapper" "$out/bin/$cross-ld"
+doSubstitute "$ldWrapper" $out/$cross/ld
+ln -s $out/$cross/ld $out/bin/$cross-ld
 chmod +x "$out/bin/$cross-ld"
 
 
