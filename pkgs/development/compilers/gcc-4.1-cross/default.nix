@@ -30,6 +30,8 @@ stdenv.mkDerivation {
     --disable-libmudflap
   ";
 
+  dontStrip = true;
+
   meta = {
     homepage = "http://gcc.gnu.org/";
     license = "GPL/LGPL";

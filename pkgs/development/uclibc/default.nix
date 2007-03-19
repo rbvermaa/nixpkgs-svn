@@ -22,4 +22,5 @@ stdenv.mkDerivation {
   inherit kernelHeadersCross;
   buildInputs = [gccCross binutilsCross mktemp];
   inherit cross;
+  dontStrip = true;
 }
