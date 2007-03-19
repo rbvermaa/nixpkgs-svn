@@ -7,12 +7,11 @@ mkdir $NIX_FIXINC_DUMMY
 
 if test "$noSysDirs" = "1"; then
 
-        if test -e $NIX_GCC/nix-support/orig-glibc; then
+    if test -e $NIX_GCC/nix-support/orig-libc; then
         # Figure out what extra flags to pass to the gcc compilers
         # being generated to make sure that they use our glibc.
         extraCFlags="$(cat $NIX_GCC/nix-support/libc-cflags)"
-        extraLDFlags="$(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/ni
-x-support/libc-ldflags-before)"
+        extraLDFlags="$(cat $NIX_GCC/nix-support/libc-ldflags) $(cat $NIX_GCC/nix-support/libc-ldflags-before)"
 
         # Use *real* header files, otherwise a limits.h is generated
         # that does not include Glibc's limits.h (notably missing
