@@ -1,6 +1,9 @@
 source $stdenv/setup
 
-export installFlags="PREFIX=$out"
+if ! test -z ${cross}; then
+   export CROSS_COMPILE=${cross}-
+   export ARCH=${cross}
+fi
 
 preBuild() {
 	cp $config .config

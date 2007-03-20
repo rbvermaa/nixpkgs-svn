@@ -9,8 +9,8 @@ stdenv.mkDerivation {
     sha256 = "03wvqba25iz264lp4q1z7rkr7q1gmzkb98xqk893w3i1kqf9n6ns";
   };
 
-  inherit gccCross;
-  buildinputs = [(if cross != "" then binutilsCross else null)];
-  # fixme, need a decent config for MIPS or so
-  config = ./x86-config-1.4;
+  ## this is ugly, needs improvement
+  inherit cross;
+  buildinputs = (if cross != "" then [gccCross] else []);
+  config = config-1.4;
 }
