@@ -177,8 +177,9 @@ rec {
   };
 
   fetchsvn = import ../build-support/fetchsvn {
-    inherit stdenv subversion nix openssh;
+    inherit stdenv subversion openssh;
     sshSupport = true;
+    nix = nixUnstable;
   };
 
   # Allow the stdenv to determine fetchurl, to cater for strange
@@ -636,7 +637,7 @@ rec {
   gcc41mips = import ../build-support/gcc-cross-wrapper {
     nativeTools = false;
     nativeLibc = false;
-    cross = "mips-linux";
+    cross = "mipsel-linux";
     gcc = gcc41mipsboot;
     #inherit (stdenv.gcc) libc;
     libc = uclibcMips;
@@ -650,7 +651,7 @@ rec {
     langCC = false;
     binutilsCross = binutilsMips;
     kernelHeadersCross = kernelHeadersMips;
-    cross = "mips-linux";
+    cross = "mipsel-linux";
   };
 
   gcc40sparc = import ../build-support/gcc-cross-wrapper {
@@ -992,7 +993,7 @@ rec {
 
   binutilsMips = import ../development/tools/misc/binutils-cross {
     inherit fetchurl stdenv noSysDirs;
-    cross = "mips-linux";
+    cross = "mipsel-linux";
   };
 
   binutilsSparc = import ../development/tools/misc/binutils-cross {
@@ -1185,11 +1186,22 @@ rec {
   atermMips = import ../development/libraries/aterm {
     inherit fetchurl;
     stdenv = addAttrsToDerivation {
-      CC = "mips-linux-gcc";
-      configureFlags = "--target=mips-linux --host=i686-linux";
+      #CC = "mips-linux-gcc";
+      CC = "mipsel-linux-gcc";
+      configureFlags = "--target=mipsel-linux --host=i686-linux";
       preBuild = "touch test/terms.c test/terms.h";
-    } (overrideInStdenv (makeStaticBinaries stdenv) [gcc41mips]);
+    } (overrideInStdenv (stdenv) [gcc41mips]);
   };
+
+  #atermMips = import ../development/libraries/aterm {
+    #inherit fetchurl;
+    #stdenv = addAttrsToDerivation {
+      ##CC = "mips-linux-gcc";
+      #CC = "mipsel-linux-gcc";
+      #configureFlags = "--target=mipsel-linux --host=i686-linux";
+      #preBuild = "touch test/terms.c test/terms.h";
+    #} (overrideInStdenv (makeStaticBinaries stdenv) [gcc41mips]);
+  #};
 
   aterm242fixes = import ../development/libraries/aterm/2.4.2-fixes.nix {
     inherit fetchurl stdenv;
@@ -2091,7 +2103,7 @@ rec {
     inherit fetchurl stdenv alsaLib ncurses gettext;
   };
 
-  #uclibcSparc = import ../development/uclibc {
+  #uclibcSparc = import ../development/libraries/uclibc {
   #  inherit fetchurl stdenv mktemp;
   #  kernelHeadersCross = kernelHeadersSparc;
   #  binutilsCross = binutilsSparc;
@@ -2163,7 +2175,7 @@ rec {
 
   kernelHeadersMips = import ../os-specific/linux/kernel-headers-cross {
     inherit fetchurl stdenv;
-    cross = "mips-linux";
+    cross = "mipsel-linux";
   };
 
   kernelHeadersSparc = import ../os-specific/linux/kernel-headers-cross {
@@ -2297,7 +2309,7 @@ rec {
     inherit fetchurl stdenv;
   };
 
-  uclibcArm = import ../development/uclibc {
+  uclibcArm = import ../development/libraries/uclibc {
     inherit fetchurl stdenv mktemp;
     kernelHeadersCross = kernelHeadersArm;
     binutilsCross = binutilsArm;
@@ -2305,12 +2317,12 @@ rec {
     cross = "arm-linux";
   };
 
-  uclibcMips = import ../development/uclibc {
+  uclibcMips = import ../development/libraries/uclibc {
     inherit fetchurl stdenv mktemp;
     kernelHeadersCross = kernelHeadersMips;
     binutilsCross = binutilsMips;
     gccCross = gcc41mipsboot;
-    cross = "mips-linux";
+    cross = "mipsel-linux";
   };
 
   udev = import ../os-specific/linux/udev {
@@ -2550,6 +2562,11 @@ rec {
 
   hello = import ../applications/misc/hello/ex-1 {
     inherit fetchurl stdenv perl;
+  };
+
+  helloCross = import ../applications/misc/hello/ex-1 {
+    inherit fetchurl perl;
+    stdenv = overrideGCC stdenv gcc41mips;
   };
 
   inkscape = import ../applications/graphics/inkscape {
@@ -2903,6 +2920,8 @@ rec {
 
   busybox = import ../misc/busybox {
     inherit fetchurl stdenv;
+    cross = "mipsel-linux";
+    gccCross = gcc41mips;
   };
 
   cups = import ../misc/cups {
@@ -3012,6 +3031,10 @@ rec {
 
   umlutilities = import ../misc/uml-utilities {
     inherit fetchurl stdenv;
+  };
+
+  trx = import ../misc/openwrt/trx {
+    inherit fetchsvn stdenv;
   };
 
 }
