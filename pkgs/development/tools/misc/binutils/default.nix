@@ -2,12 +2,23 @@
 
 stdenv.mkDerivation {
   name = "binutils-2.18";
+  
   builder = ./builder.sh;
+  
   src = fetchurl {
     url = mirror://gnu/binutils/binutils-2.18.tar.bz2;
     sha256 = "16zfc7llbjdn69bbdy7kqgg2xa67ypgj7z5qicgwzvghaaj36yj8";
   };
+
+  patches = [
+    # Set timestamps, uids and gids in .a archives to 0 during Nix
+    # builds so that multiple builds of the same derivation yield the
+    # same result.
+    ./ar-purity.patch
+  ];
+  
   inherit noSysDirs;
+  
   configureFlags = "--disable-werror"; # needed for dietlibc build
 
   meta = {

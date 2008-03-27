@@ -1,4 +1,5 @@
 export NIX_ENFORCE_PURITY=1
+export NIX_AR_FORCE_PURITY=1
 
 if test "$param1" = "static"; then
     export NIX_CFLAGS_LINK="-static"
