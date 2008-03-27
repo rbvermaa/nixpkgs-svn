@@ -296,9 +296,9 @@ let
 
 in [
   i686LinuxPkgs
-  x86_64LinuxPkgs
-  i686FreeBSDPkgs
-  powerpcDarwinPkgs
-  i686DarwinPkgs
-  cygwinPkgs
+  #x86_64LinuxPkgs
+  #i686FreeBSDPkgs
+  #powerpcDarwinPkgs
+  #i686DarwinPkgs
+  #cygwinPkgs
 ]

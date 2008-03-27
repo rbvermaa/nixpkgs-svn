@@ -50,6 +50,7 @@ rec {
     tarball = download {inherit url sha1 pkgname;};
     inherit system;
     allowedReferences = [];
+    dummy = "1";
   };
 
   # The various statically linked components that make up the standard
