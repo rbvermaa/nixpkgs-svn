@@ -1,0 +1,19 @@
+diff -rc binutils-2.18/bfd/archive.c binutils-2.18-new/bfd/archive.c
+*** binutils-2.18/bfd/archive.c	2007-08-06 21:59:14.000000000 +0200
+--- binutils-2.18-new/bfd/archive.c	2008-03-27 13:17:55.000000000 +0100
+***************
+*** 1383,1388 ****
+--- 1383,1395 ----
+        return NULL;
+      }
+  
++   char * envvar = getenv("NIX_AR_FORCE_PURITY");
++   if (envvar && strcmp(envvar, "1") == 0) {
++       status.st_mtime = 0;
++       status.st_uid = 0;
++       status.st_gid = 0;
++   }
++ 
+    amt = sizeof (struct ar_hdr) + sizeof (struct areltdata);
+    ared = bfd_zalloc (abfd, amt);
+    if (ared == NULL)
