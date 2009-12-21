@@ -2964,6 +2964,10 @@ let
      */
   pkgconfig = forceBuildDrv pkgconfigReal;
 
+  pmake = import ../development/tools/build-managers/pmake {
+    inherit fetchurl stdenv;
+  };
+
   radare = import ../development/tools/analysis/radare {
     inherit stdenv fetchurl pkgconfig libusb readline gtkdialog python
       ruby libewf perl;
