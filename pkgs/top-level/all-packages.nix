@@ -5507,6 +5507,10 @@ let
     inherit fetchurl stdenv bison flex;
   };
 
+  kfreebsd_8 = import ../os-specific/kfreebsd-gnu/kfreebsd-8 {
+    inherit fetchurl stdenv pmake;
+  };
+
   linuxHeaders = linuxHeaders_2_6_28;
 
   linuxHeadersCross = cross : forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.28.nix {

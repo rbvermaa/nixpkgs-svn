@@ -99,9 +99,11 @@ let
                || result.system == "i686-darwin"
                || result.system == "i686-freebsd"
                || result.system == "i686-openbsd"
-               || result.system == "i386-sunos";
+               || result.system == "i386-sunos"
+	       || result.system == "i686-gnu/kfreebsd";
         is64bit = result.system == "x86_64-linux"
-                || result.system == "x86_64-darwin";
+                || result.system == "x86_64-darwin"
+		|| result.system == "x86_64-gnu/kfreebsd";
 
         # Utility function: allow stdenv to be easily regenerated with
         # a different setup script.  (See all-packages.nix for an
