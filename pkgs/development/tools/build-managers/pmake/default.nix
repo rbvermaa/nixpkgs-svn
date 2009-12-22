@@ -56,7 +56,8 @@ stdenv.mkDerivation {
   installPhase =
     '' ensureDir "$out/bin"
        ensureDir "$out/share/mk"
-       ./make proginstall BINDIR="$out/bin"
+       ensureDir "$out/share/man/man1"
+       ./make proginstall maninstall BINDIR="$out/bin" MANDIR="$out/share/man"
     '';
 
   # XXX: The tests fail weirdly, but who cares?
