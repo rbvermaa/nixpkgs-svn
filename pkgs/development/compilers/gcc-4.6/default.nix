@@ -34,7 +34,6 @@ assert langTreelang -> bison != null && flex != null;
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null
                        && perl != null;  # for `--enable-java-home'
-assert langAda      -> gnatboot != null;
 assert langVhdl     -> gnat != null;
 
 # LTO needs libelf and zlib.
@@ -215,14 +214,12 @@ stdenv.mkDerivation ({
     ++ (optionals langJava [zip unzip])
     ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
     ++ (optionals (cross != null) [binutilsCross])
-    ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
     ;
 
   configureFlagsArray = stdenv.lib.optionals
     (ppl != null && ppl.dontDisableStatic == true)
-        [ "--with-host-libstdcxx=-lstdc++ -lgcc_s"
-            "--with-stage1-libs=-lstdc++ -lgcc_s" ];
+        [ "--with-host-libstdcxx=-lstdc++ -lgcc_s" ];
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}

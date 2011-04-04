@@ -60,9 +60,7 @@ rec {
     
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
     
-    tarball = download {
-      inherit (bootstrapFiles.bootstrapTools) url sha256;
-    };
+    tarball = ./bootstrap-tools.cpio.bz2;
     
     inherit system;
     
@@ -218,8 +216,11 @@ rec {
             static = true;
           };
         };
-        cloogppl = stdenvLinuxBoot3Pkgs.cloogppl.override {
-          inherit ppl;
+
+        cloog = stdenvLinuxBoot3Pkgs.cloog.override {
+          isl = stdenvLinuxBoot3Pkgs.isl.override {
+            static = true;
+          };
           static = true;
         };
       });

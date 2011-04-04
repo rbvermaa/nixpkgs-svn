@@ -1598,7 +1598,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc45;
+  gcc = gcc46;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
     inherit fetchurl stdenv noSysDirs;
@@ -1681,7 +1681,6 @@ let
     (makeOverridable (import ../development/compilers/gcc-4.6) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         cloog gettext which noSysDirs;
-      ppl = callPackage ../development/libraries/ppl/0.11.nix { };
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -1754,7 +1753,7 @@ let
   gcc46_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.6) {
     inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
       cloog gettext which noSysDirs;
-    ppl = callPackage ../development/libraries/ppl/0.11.nix { };
+    langAda = true;
     
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
