@@ -1889,7 +1889,7 @@ let
 
   gnat45 = wrapGCC (gcc45_real.gcc.override {
     name = "gnat";
-    langCC = false;
+    langCC = true;
     langC = true;
     langAda = true;
     profiledCompiler = false;

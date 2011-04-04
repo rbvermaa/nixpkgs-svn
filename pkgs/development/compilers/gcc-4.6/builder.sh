@@ -9,7 +9,7 @@ mkdir $NIX_FIXINC_DUMMY
 # Thing.
 export CPP="gcc -E"
 if test "$langCC" = "1"; then
-  export CXXCPP="gcc -E" #We only want this if C++ is enabled
+  export CXXCPP="g++ -E" #We only want this if C++ is enabled
 fi
 
 if test "$staticCompiler" = "1"; then
