@@ -137,12 +137,13 @@ rec {
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
         
         # Copy what we need of GCC.
-        cp -d ${gcc.gcc}/bin/gcc $out/bin
-        cp -d ${gcc.gcc}/bin/cpp $out/bin
-        cp -d ${gcc.gcc}/bin/g++ $out/bin
-        cp -d ${gcc.gcc}/lib*/libgcc_s.so* $out/lib
-        cp -d ${gcc.gcc}/lib*/libstdc++.so* $out/lib
-        cp -rd ${gcc.gcc}/lib/gcc $out/lib
+        cp -d ${gnat.gcc}/bin/gcc $out/bin
+        cp -d ${gnat.gcc}/bin/cpp $out/bin
+        cp -d ${gnat.gcc}/bin/g++ $out/bin
+        cp -d ${gnat.gcc}/bin/gnat* $out/bin
+        cp -d ${gnat.gcc}/lib*/libgcc_s.so* $out/lib
+        cp -d ${gnat.gcc}/lib*/libstdc++.so* $out/lib
+        cp -rd ${gnat.gcc}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -150,9 +151,9 @@ rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc.gcc}/libexec/* $out/libexec
+        cp -rd ${gnat.gcc}/libexec/* $out/libexec
         mkdir $out/include
-        cp -rd ${gcc.gcc}/include/c++ $out/include
+        cp -rd ${gnat.gcc}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
@@ -182,6 +183,7 @@ rec {
 
         nuke-refs $out/bin/*
         nuke-refs $out/lib/*
+        nuke-refs $out/lib/gcc/*/*/adalib/*
         nuke-refs $out/libexec/gcc/*/*/*
 
         mkdir $out/.pack
@@ -218,7 +220,7 @@ rec {
 
       buildCommand = ''
         ${build}/in-nixpkgs/mkdir $out
-        ${build}/in-nixpkgs/bzip2 -d < ${build}/on-server/bootstrap-tools.cpio.bz2 | (cd $out && ${build}/in-nixpkgs/cpio -V -i)
+        ${build}/in-nixpkgs/bzip2 -d < ${build}/on-server/bootstrap-tools.cpio.bz2 | (cd $out && ${build}/in-nixpkgs/cpio -v -i)
 
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             echo patching $i
