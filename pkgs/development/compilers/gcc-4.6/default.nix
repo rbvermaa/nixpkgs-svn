@@ -1,7 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false, langTreelang ? false
 , langJava ? false
-, langAda ? false
+, langAda ? true
 , langVhdl ? false
 , langGo ? false
 , profiledCompiler ? false
@@ -199,7 +199,7 @@ stdenv.mkDerivation ({
     else null;
 
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
-    libcCross crossMingw langCC;
+    libcCross crossMingw;
 
   buildNativeInputs = [ texinfo which ]
     ++ optional (perl != null) perl;
@@ -214,6 +214,7 @@ stdenv.mkDerivation ({
     ++ (optionals langJava [zip unzip])
     ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
     ++ (optionals (cross != null) [binutilsCross])
+    ++ (optionals (gnatboot != null) [gnatboot])
     ++ (optionals langVhdl [gnat])
     ;
 

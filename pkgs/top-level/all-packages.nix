@@ -1128,6 +1128,8 @@ let
 
   ppl = callPackage ../development/libraries/ppl { };
 
+  ppl0_11 = callPackage ../development/libraries/ppl/0.11.nix { };
+
   /* WARNING: this version is unsuitable for using with a setuid wrapper */
   ppp = builderDefsPackage (import ../tools/networking/ppp) {
   };
@@ -1681,6 +1683,7 @@ let
     (makeOverridable (import ../development/compilers/gcc-4.6) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         cloog gettext which noSysDirs;
+      ppl = ppl0_11;
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -1753,7 +1756,7 @@ let
   gcc46_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.6) {
     inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
       cloog gettext which noSysDirs;
-    langAda = true;
+    ppl = ppl0_11;
     
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
@@ -1888,7 +1891,7 @@ let
 
   gnat45 = wrapGCC (gcc45_real.gcc.override {
     name = "gnat";
-    langCC = true;
+    langCC = false;
     langC = true;
     langAda = true;
     profiledCompiler = false;

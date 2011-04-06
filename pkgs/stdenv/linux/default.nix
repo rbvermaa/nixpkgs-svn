@@ -60,7 +60,9 @@ rec {
     
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
     
-    tarball = ./bootstrap-tools.cpio.bz2;
+    tarball = download {
+      inherit (bootstrapFiles.bootstrapTools) url sha256;
+    };
     
     inherit system;
     
@@ -210,20 +212,21 @@ rec {
   };
 
   gccWithStaticLibs = stdenvLinuxBoot3Pkgs.gcc.gcc.override (rec {
-        ppl = stdenvLinuxBoot3Pkgs.ppl.override {
-          static = true;
-          gmpxx = stdenvLinuxBoot3Pkgs.gmpxx.override {
-            static = true;
-          };
-        };
+    ppl = stdenvLinuxBoot3Pkgs.ppl0_11.override {
+      static = true;
+      gmpxx = stdenvLinuxBoot3Pkgs.gmpxx.override {
+        static = true;
+      };
+    };
 
-        cloog = stdenvLinuxBoot3Pkgs.cloog.override {
-          isl = stdenvLinuxBoot3Pkgs.isl.override {
-            static = true;
-          };
-          static = true;
-        };
-      });
+    cloog = stdenvLinuxBoot3Pkgs.cloog.override {
+      isl = stdenvLinuxBoot3Pkgs.isl.override {
+        static = true;
+      };
+      static = true;
+    };
+  });
+
 
   # 8) Construct a fourth stdenv identical to the second, except that
   #    this one uses the dynamically linked GCC and Binutils from step
