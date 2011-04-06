@@ -4,7 +4,7 @@
 
 {
   bootstrapTools = {
-    url = http://www.shealevy.com/bootstrap-tools.cpio.bz2;
-    sha256 = "18qg8xanrzprhy9z7z499pgwifsnrpz6shh230rbf3zg8cfgjj2x";
+    url = http://www.shealevy.com/nix/1/bootstrap-tools.cpio.bz2;
+    sha256 = "0qvmz48ba10g0q5fl3rgqpf3yfzr13aflk08f1hxdb2hqbf164dj";
   };
 }

@@ -20,6 +20,7 @@ fi
 # use a copy of patchelf.
 LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/cp $out/bin/patchelf .
 
+set +e
 for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     echo patching $i
     if ! test -L $i; then
@@ -29,6 +30,7 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
              $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath $i
     fi
 done
+set -e
 for i in $out/lib/librt* ; do
     echo patching $i
     if ! test -L $i; then

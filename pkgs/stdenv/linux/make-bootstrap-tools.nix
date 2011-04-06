@@ -161,8 +161,8 @@ rec {
 
         cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
-        cp -d ${ppl}/lib/libppl*.so* $out/lib
-        cp -d ${cloogppl}/lib/libcloog*.so* $out/lib
+        cp -d ${ppl0_11}/lib/libppl*.so* $out/lib
+        cp -d ${cloog}/lib/libcloog*.so* $out/lib
         cp -d ${mpc}/lib/libmpc*.so* $out/lib
         cp -d ${zlib}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
@@ -223,6 +223,7 @@ rec {
         ${build}/in-nixpkgs/mkdir $out
         ${build}/in-nixpkgs/bzip2 -d < ${build}/on-server/bootstrap-tools.cpio.bz2 | (cd $out && ${build}/in-nixpkgs/cpio -v -i)
 
+        set +e
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             echo patching $i
             if ! test -L $i; then
@@ -230,6 +231,7 @@ rec {
                     $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib --force-rpath $i
             fi
         done
+        set -e
 
         # Fix the libc linker script.
         for i in $out/lib/libc.so; do
