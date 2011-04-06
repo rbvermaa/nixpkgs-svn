@@ -141,7 +141,7 @@ rec {
         cp -d ${gcc.gcc}/bin/gcc $out/bin
         cp -d ${gcc.gcc}/bin/cpp $out/bin
         cp -d ${gcc.gcc}/bin/g++ $out/bin
-        cp -d ${gcc.gcc}/bin/gnat* $out/bin
+        cp -d ${gcc.gcc}/bin/gnat{make,bind,link} $out/bin
         cp -d ${gcc.gcc}/lib*/libgcc_s.so* $out/lib
         cp -d ${gcc.gcc}/lib*/libstdc++.so* $out/lib
         cp -rd ${gcc.gcc}/lib/gcc $out/lib

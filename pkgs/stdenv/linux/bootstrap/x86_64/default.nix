@@ -5,6 +5,6 @@
 {
   bootstrapTools = {
     url = http://www.shealevy.com/nix/1/bootstrap-tools.cpio.bz2;
-    sha256 = "0qvmz48ba10g0q5fl3rgqpf3yfzr13aflk08f1hxdb2hqbf164dj";
+    sha256 = "1x9vqycqg41l3f167scl5nmflgmysx4a65afdz7zds4m0y27va0g";
   };
 }
