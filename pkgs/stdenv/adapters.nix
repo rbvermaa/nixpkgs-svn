@@ -364,7 +364,7 @@ rec {
     
   traceSyscalls = stdenv: stdenv //
     { mkDerivation = args: pkgs.lib.overrideDerivation (stdenv.mkDerivation args)
-        (args2: {
+        (args2: if args2 ? dontTrace then { } else {
           realArgs = args2.args;
           args = [ "-e" traceScript ];
           enableParallelBuilding = false;

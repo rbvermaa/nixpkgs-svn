@@ -13,6 +13,7 @@ let
     stdenv.mkDerivation ({
       name = "mirrors-list";
       builder = ./write-mirror-list.sh;
+      dontTrace = true;
     } // mirrors);
 
   # Names of the master sites that are mirrored (i.e., "sourceforge",
@@ -64,6 +65,8 @@ stdenv.mkDerivation {
     if showURLs then "urls"
     else if name != "" then name
     else baseNameOf (toString (builtins.head urls_));
+
+  dontTrace = true;
     
   builder = ./builder.sh;
   
