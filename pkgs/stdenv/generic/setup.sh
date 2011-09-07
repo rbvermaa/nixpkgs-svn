@@ -307,7 +307,7 @@ stripDirs() {
 
     if test -n "${dirs}"; then
         header "stripping (with flags $stripFlags) in $dirs"
-        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
+        find $dirs \( -name '.build' -prune \) -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
         stopNest
     fi
 }
@@ -665,7 +665,7 @@ patchShebangs() {
     header "patching script interpreter paths"
     local dir="$1"
     local f
-    for f in $(find "$dir" -type f -perm +0100); do
+    for f in $(find "$dir" \( -name '.build' -prune \) -type f -perm +0100); do
         local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
         if test -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE"; then
             local newPath=$(type -P $(basename $oldPath) || true)

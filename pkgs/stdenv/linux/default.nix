@@ -7,6 +7,8 @@
 # The function defaults are for easy testing.
 {system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix, platform}:
 
+with import ../adapters.nix { dietlibc = null; fetchurl = null; runCommand = null; };
+
 rec {
 
   bootstrapFiles =
@@ -143,14 +145,14 @@ rec {
   # Create the first "real" standard environment.  This one consists
   # of bootstrap tools only, and a minimal Glibc to keep the GCC
   # configure script happy.
-  stdenvLinuxBoot1 = stdenvBootFun {
+  stdenvLinuxBoot1 = traceSyscalls (keepBuildTree (stdenvBootFun {
     gcc = wrapGCC {
       libc = bootstrapGlibc;
       binutils = bootstrapTools;
       coreutils = bootstrapTools;
     };
     inherit fetchurl;
-  };
+  }));
   
 
   # 2) These are the packages that we can build with the first
@@ -163,16 +165,17 @@ rec {
   };
 
   firstBinutils = stdenvLinuxBoot1Pkgs.binutils;
+  
 
   # 3) 2nd stdenv that we will use to build only the glibc.
-  stdenvLinuxBoot2 = stdenvBootFun {
+  stdenvLinuxBoot2 = traceSyscalls (keepBuildTree (stdenvBootFun {
     gcc = wrapGCC {
       libc = bootstrapGlibc;
       binutils = firstBinutils;
       coreutils = bootstrapTools;
     };
     inherit fetchurl;
-  };
+  }));
 
 
   # 4) These are the packages that we can build with the 2nd
@@ -191,7 +194,7 @@ rec {
   # 6) Construct a third stdenv identical to the 2nd, except that
   #    this one uses the Glibc built in step 3.  It still uses
   #    the recent binutils and rest of the bootstrap tools, including GCC.
-  stdenvLinuxBoot3 = stdenvBootFun {
+  stdenvLinuxBoot3 = traceSyscalls (keepBuildTree (stdenvBootFun {
     gcc = wrapGCC {
       binutils = stdenvLinuxBoot1Pkgs.binutils;
       coreutils = bootstrapTools;
@@ -202,7 +205,7 @@ rec {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
-  };
+  }));
 
   
   # 7) The packages that can be built using the third stdenv.
@@ -229,7 +232,7 @@ rec {
   #    this one uses the dynamically linked GCC and Binutils from step
   #    5.  The other tools (e.g. coreutils) are still from the
   #    bootstrap tools.
-  stdenvLinuxBoot4 = stdenvBootFun {
+  stdenvLinuxBoot4 = traceSyscalls (keepBuildTree (stdenvBootFun {
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot3Pkgs) binutils;
       coreutils = bootstrapTools;
@@ -241,7 +244,7 @@ rec {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
-  };
+  }));
 
   
   # 9) The packages that can be built using the fourth stdenv.
@@ -258,7 +261,7 @@ rec {
   #     When updating stdenvLinux, make sure that the result has no
   #     dependency (`nix-store -qR') on bootstrapTools or the
   #     first binutils built.
-  stdenvLinux = import ../generic rec {
+  stdenvLinux = traceSyscalls (keepBuildTree (import ../generic rec {
     name = "stdenv-linux";
     
     inherit system;
@@ -295,6 +298,6 @@ rec {
         gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl;
     };
-  };
+  }));
 
 }

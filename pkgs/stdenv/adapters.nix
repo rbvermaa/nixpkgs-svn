@@ -349,4 +349,30 @@ rec {
           drvPath = validate pkg.drvPath;
         };
     };
+
+
+  pkgs = import /etc/nixos/nixpkgs { };
+
+  traceScript = pkgs.writeScript "builder.sh"
+    ''
+      echo tracing: $builder $realArgs
+      ${pkgs.coreutils}/bin/mkdir -p $out/.trace
+      ${pkgs.strace}/bin/strace -e trace=file,process,dup,dup2,close,pipe -v -q -f -s 512 ${pkgs.stdenv.shell} -c '(cd $TMPDIR && $builder $realArgs)' > $out/.trace/log 2>&1
+      ${pkgs.bzip2}/bin/bzip2 $out/.trace/log
+    '';
+
+    
+  traceSyscalls = stdenv: stdenv //
+    { mkDerivation = args: pkgs.lib.overrideDerivation (stdenv.mkDerivation args)
+        (args2: {
+          realArgs = args2.args;
+          args = [ "-e" traceScript ];
+          enableParallelBuilding = false;
+          # Don't run the patchelf phase in stdenv since I don't want
+          # Nixpkgs-specific stuff polluting our pictures :-)
+          dontPatchELF = true;
+        });
+    };
+
+    
 }
