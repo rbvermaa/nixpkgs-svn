@@ -1507,6 +1507,7 @@ let
 
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
+  /*
   xbursttools = assert stdenv ? glibc; import ../tools/misc/xburst-tools {
     inherit stdenv fetchgit autoconf automake libusb confuse;
     # It needs a cross compiler for mipsel to build the firmware it will
@@ -1539,6 +1540,7 @@ let
       in
         pkgsCross.gccCrossStageStatic;
   };
+  */
 
   xclip = callPackage ../tools/misc/xclip { };
 
@@ -7850,7 +7852,7 @@ let
   # TODO: merge with branches/drop-kde4.5 if you want to remove KDE SC 4.5
   # This branch removes kde45 and quite a few compatibility hacks
   kde45 = kdePackagesFor pkgs.kde45 "4.5";
-  kde47 = kdePackagesFor pkgs.kde47 "4.7";
+  #kde47 = kdePackagesFor pkgs.kde47 "4.7";
 
   kdePackagesFor = self: version:
     let callPackageOrig = callPackage; in
