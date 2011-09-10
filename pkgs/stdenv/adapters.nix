@@ -4,6 +4,7 @@
 
 { dietlibc, fetchurl, runCommand }:
 
+let pkgs = import /etc/nixos/nixpkgs { }; in
    
 rec {
 
@@ -350,8 +351,6 @@ rec {
         };
     };
 
-
-  pkgs = import /etc/nixos/nixpkgs { };
 
   traceScript = pkgs.writeScript "builder.sh"
     ''
