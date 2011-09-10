@@ -2,8 +2,8 @@
    a new stdenv with different behaviour, e.g. using a different C
    compiler. */
 
-{dietlibc, fetchurl, runCommand}:
-   
+{ dietlibc, fetchurl, runCommand }:
+
    
 rec {
 
@@ -363,7 +363,7 @@ rec {
 
     
   traceSyscalls = stdenv: stdenv //
-    { mkDerivation = args: pkgs.lib.overrideDerivation (stdenv.mkDerivation args)
+    { mkDerivation = args: stdenv.lib.overrideDerivation (stdenv.mkDerivation args)
         (args2: if args2 ? dontTrace then { } else {
           realArgs = args2.args;
           args = [ "-e" traceScript ];
