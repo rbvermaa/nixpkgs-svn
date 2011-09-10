@@ -87,7 +87,8 @@ let
           # should be made available to Nix expressions using the
           # derivation (e.g., in assertions).
           //
-          (if attrs ? passthru then attrs.passthru else {});
+          lib.optionalAttrs (attrs ? passthru)
+            (attrs.passthru // { passthru = attrs.passthru; });
 
         # Utility flags to test the type of platform.
         isDarwin = result.system == "i686-darwin"

@@ -36,13 +36,13 @@ rec {
       # Filter out special attributes.
       drop = ["meta" "passthru" "outPath" "drvPath" "hostDrv" "buildDrv" "type" "override" "deepOverride" "origArgs"]
               # also drop functions such as .merge .override etc
-             ++ lib.filter (n: isFunction (getAttr n drv)) (attrNames drv);
+             ++ lib.filter (n: isFunction (getAttr n drv)) (attrNames drv)
+             ++ lib.optionals (drv ? passthru) (attrNames drv.passthru);
       attrs = removeAttrs drv drop;
       newDrv = derivation (attrs // (f drv));
-    in newDrv //
-      { meta = if drv ? meta then drv.meta else {};
-        passthru = if drv ? passthru then drv.passthru else {};
-      };
+    in newDrv
+      // { meta = if drv ? meta then drv.meta else {}; }
+      // (if drv ? passthru then drv.passthru // { passthru = drv.passthru; } else {});
 
 
   # usage: (you can use override multiple times)
