@@ -1,4 +1,5 @@
 args: with args; with stringsWithDeps; with lib;
+assert false;
 let inherit (builtins) head tail trace; in
 (rec
 {

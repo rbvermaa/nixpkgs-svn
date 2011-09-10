@@ -20,7 +20,7 @@ let inherit (lib) nv nvs; in
         # consider adding addtional elements by derivation.merge { removeAttrs = ["elem"]; };
         removeAttrs ? ["cfg" "flags"]
 
-      }: (lib.defaultOverridableDelayableArgs ( a: mkDerivation a) 
+      }: assert false; (lib.defaultOverridableDelayableArgs ( a: mkDerivation a) 
          {
            inherit applyPreTidy removeAttrs;
          }).merge;
