@@ -145,14 +145,14 @@ rec {
   # Create the first "real" standard environment.  This one consists
   # of bootstrap tools only, and a minimal Glibc to keep the GCC
   # configure script happy.
-  stdenvLinuxBoot1 = traceSyscalls (keepBuildTree (stdenvBootFun {
+  stdenvLinuxBoot1 = traceSyscalls (stdenvBootFun {
     gcc = wrapGCC {
       libc = bootstrapGlibc;
       binutils = bootstrapTools;
       coreutils = bootstrapTools;
     };
     inherit fetchurl;
-  }));
+  });
   
 
   # 2) These are the packages that we can build with the first
@@ -168,14 +168,14 @@ rec {
   
 
   # 3) 2nd stdenv that we will use to build only the glibc.
-  stdenvLinuxBoot2 = traceSyscalls (keepBuildTree (stdenvBootFun {
+  stdenvLinuxBoot2 = traceSyscalls (stdenvBootFun {
     gcc = wrapGCC {
       libc = bootstrapGlibc;
       binutils = firstBinutils;
       coreutils = bootstrapTools;
     };
     inherit fetchurl;
-  }));
+  });
 
 
   # 4) These are the packages that we can build with the 2nd
@@ -194,7 +194,7 @@ rec {
   # 6) Construct a third stdenv identical to the 2nd, except that
   #    this one uses the Glibc built in step 3.  It still uses
   #    the recent binutils and rest of the bootstrap tools, including GCC.
-  stdenvLinuxBoot3 = traceSyscalls (keepBuildTree (stdenvBootFun {
+  stdenvLinuxBoot3 = traceSyscalls (stdenvBootFun {
     gcc = wrapGCC {
       binutils = stdenvLinuxBoot1Pkgs.binutils;
       coreutils = bootstrapTools;
@@ -205,7 +205,7 @@ rec {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
-  }));
+  });
 
   
   # 7) The packages that can be built using the third stdenv.
@@ -232,7 +232,7 @@ rec {
   #    this one uses the dynamically linked GCC and Binutils from step
   #    5.  The other tools (e.g. coreutils) are still from the
   #    bootstrap tools.
-  stdenvLinuxBoot4 = traceSyscalls (keepBuildTree (stdenvBootFun {
+  stdenvLinuxBoot4 = traceSyscalls (stdenvBootFun {
     gcc = wrapGCC rec {
       inherit (stdenvLinuxBoot3Pkgs) binutils;
       coreutils = bootstrapTools;
@@ -244,7 +244,7 @@ rec {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
     inherit fetchurl;
-  }));
+  });
 
   
   # 9) The packages that can be built using the fourth stdenv.
@@ -261,7 +261,7 @@ rec {
   #     When updating stdenvLinux, make sure that the result has no
   #     dependency (`nix-store -qR') on bootstrapTools or the
   #     first binutils built.
-  stdenvLinux = traceSyscalls (keepBuildTree (import ../generic rec {
+  stdenvLinux = traceSyscalls (import ../generic rec {
     name = "stdenv-linux";
     
     inherit system;
@@ -298,6 +298,6 @@ rec {
         gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl;
     };
-  }));
+  });
 
 }

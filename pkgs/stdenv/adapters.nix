@@ -357,7 +357,8 @@ rec {
       #! ${pkgs.bash}/bin/bash
       echo tracing: $builder $realArgs
       set +o posix
-      ${pkgs.coreutils}/bin/mkdir -p $out/.trace
+      ${pkgs.coreutils}/bin/mkdir -p $out/.trace $out/.build
+      cd $out/.build
       # Compress the strace output on the fly.  The builder's stderr
       # also goes to the log so that the trace processor can see stuff
       # like Make trace messages.
