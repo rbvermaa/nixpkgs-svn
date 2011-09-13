@@ -358,13 +358,12 @@ rec {
       echo tracing: $builder $realArgs
       set +o posix
       ${pkgs.coreutils}/bin/mkdir -p $out/.trace $out/.build
-      cd $out/.build
       # Compress the strace output on the fly.  The builder's stderr
       # also goes to the log so that the trace processor can see stuff
       # like Make trace messages.
       exec 4> >(${pkgs.bzip2}/bin/bzip2 > $out/.trace/log.bz2)
       exec 5> >(${pkgs.coreutils}/bin/tee /dev/fd/4)
-      ${pkgs.strace}/bin/strace -e trace=file,process,dup,dup2,close,pipe -v -q -f -s 512 -o /dev/fd/4 ${pkgs.stdenv.shell} -c '(cd $TMPDIR && $builder $realArgs)' 2>&5
+      ${pkgs.strace}/bin/strace -e trace=file,process,dup,dup2,close,pipe -v -q -f -s 512 -o /dev/fd/4 ${pkgs.stdenv.shell} -c 'cd $out/.build; exec $builder $realArgs' 2>&5
       (cd $out && ${pkgs.gnutar}/bin/tar c .build | ${pkgs.bzip2}/bin/bzip2 > .build.tar.bz2 && ${pkgs.coreutils}/bin/chmod -R u+w .build && ${pkgs.coreutils}/bin/rm -rf .build)
     '';
 
