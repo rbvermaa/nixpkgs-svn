@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, atk, pango, cairo, perl, xlibs
-, gdk_pixbuf, xz
+, gdk_pixbuf, xz, shared_mime_info
 , xineramaSupport ? true
 , cupsSupport ? true, cups ? null
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   
-  buildNativeInputs = [ perl pkgconfig ];
+  buildNativeInputs = [ perl pkgconfig shared_mime_info ];
   
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango gdk_pixbuf cairo

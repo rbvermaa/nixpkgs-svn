@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl, libiconv, zlib, libffi
-, python, pcre }:
+, python, pcre, libelf }:
 
 # TODO:
 # * Add gio-module-fam
@@ -11,16 +11,16 @@
 #     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
 #       $out/bin/gtester-report' to postInstall if this is solved
 
-stdenv.mkDerivation rec {
-  name = "glib-2.30.3";
+stdenv.mkDerivation {
+  name = "glib-2.32.0";
 
   src = fetchurl {
-    url = mirror://gnome/sources/glib/2.30/glib-2.30.3.tar.xz;
-    sha256 = "09yxfajynbw78kji48z384lylp67kihfi1g78qrrjif4f5yb5jz6";
+    url = mirror://gnome/sources/glib/2.32/glib-2.32.0.tar.xz;
+    sha256 = "1r0s4sxz3g2iz9vl8swk3x79fyckmnbkhckyajf0cj6nbvrdksfd";
   };
 
   # configure script looks for d-bus but it is only needed for tests
-  buildInputs = [ pcre ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ pcre ] ++ (if stdenv.isLinux then [ libelf ] else [ libiconv ]);
   buildNativeInputs = [ perl pkgconfig gettext python ];
 
   propagatedBuildInputs = [ zlib libffi ];

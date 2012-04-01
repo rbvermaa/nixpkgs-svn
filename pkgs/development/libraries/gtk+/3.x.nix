@@ -7,12 +7,12 @@
 assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
-stdenv.mkDerivation rec {
-  name = "gtk+-3.2.3";
+stdenv.mkDerivation {
+  name = "gtk+-3.4.0";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gtk+/3.2/gtk+-3.2.3.tar.xz;
-    sha256 = "0g8x2kcqq17bccm4yszim837saj73zfk66ia2azcgfqfa7r21kz2";
+    url = mirror://gnome/sources/gtk+/3.4/gtk+-3.4.0.tar.xz;
+    sha256 = "1q7kh45k60fvmqzcnsjwrp2ww5n90dskwzpmm045wdb0pkl8pbq0";
   };
 
   enableParallelBuilding = true;
