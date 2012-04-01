@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 libxslt ];
 
-  postInstall = "rm -rvf $out/share/gtk-doc";
-
   meta = { 
     description = "The RDF Parser Toolkit";
     homepage = "http://librdf.org/raptor";

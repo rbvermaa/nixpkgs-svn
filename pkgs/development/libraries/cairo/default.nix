@@ -45,9 +45,6 @@ stdenv.mkDerivation rec {
         -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
   '';
 
-  # The default `--disable-gtk-doc' is ignored.
-  postInstall = "rm -rf $out/share/gtk-doc";
-
   meta = {
     description = "A 2D graphics library with support for multiple output devices";
 

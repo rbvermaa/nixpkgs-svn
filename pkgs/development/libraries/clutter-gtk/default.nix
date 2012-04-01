@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ clutter gtk3 ];
   buildNativeInputs = [ pkgconfig ];
 
-  postBuild = "rm -rf $out/share/gtk-doc";
-
   meta = {
     description = "Clutter-GTK";
 

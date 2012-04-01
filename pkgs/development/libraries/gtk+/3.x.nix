@@ -26,8 +26,6 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
 
-  postInstall = "rm -rf $out/share/gtk-doc";
-
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 

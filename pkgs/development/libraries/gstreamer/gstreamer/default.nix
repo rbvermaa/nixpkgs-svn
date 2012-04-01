@@ -19,11 +19,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = ''
-    --disable-examples --enable-failing-tests --localstatedir=/var --disable-gtk-doc --disable-docbook
+    --disable-examples --enable-failing-tests --localstatedir=/var --disable-docbook
   '';
-
-  # Hm, apparently --disable-gtk-doc is ignored...
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   setupHook = ./setup-hook.sh;
 

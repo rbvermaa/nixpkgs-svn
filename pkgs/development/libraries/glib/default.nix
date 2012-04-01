@@ -11,7 +11,7 @@
 #     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
 #       $out/bin/gtester-report' to postInstall if this is solved
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "glib-2.32.0";
 
   src = fetchurl {
@@ -29,7 +29,9 @@ stdenv.mkDerivation {
 
   passthru.gioModuleDir = "lib/gio/modules";
 
-  postInstall = ''rm -rvf $out/share/gtk-doc'';
+  preUnpack = "source ${setupHook}";
+
+  setupHook = ./setup-hook.sh;
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";

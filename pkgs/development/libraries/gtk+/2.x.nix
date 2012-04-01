@@ -34,8 +34,6 @@ stdenv.mkDerivation {
 
   configureFlags = "--with-xinput=yes";
 
-  postInstall = "rm -rf $out/share/gtk-doc";
-  
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 

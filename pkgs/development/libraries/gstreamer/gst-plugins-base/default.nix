@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gstreamer ];
  
-  postInstall = "rm -rf $out/share/gtk-doc";
-  
   meta = {
     homepage = http://gstreamer.freedesktop.org;
 

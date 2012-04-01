@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     sha256 = "5b1387ff37f03db880a2b1cbd6c6b6dfb923a29468d4d8367c458abf7704c61e";
   };
 
-  postInstall = "rm -rf $out/share/gtk-doc";
-
   meta = with stdenv.lib; {
     maintainers = [ maintainers.urkud ];
     platforms = platforms.linux;

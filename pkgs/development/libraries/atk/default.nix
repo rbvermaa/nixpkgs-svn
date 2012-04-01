@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib ];
 
-  postInstall = "rm -rf $out/share/gtk-doc";
-
   meta = {
     description = "ATK, the accessibility toolkit";
 

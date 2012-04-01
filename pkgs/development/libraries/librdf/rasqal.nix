@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ librdf_raptor2 ];
 
-  postInstall = "rm -rvf $out/share/gtk-doc";
-  
   meta = { 
     description = "Library that handles Resource Description Framework (RDF)";
     homepage = "http://librdf.org/rasqal";
