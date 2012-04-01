@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     pkgconfig gettext intltool perl perlXMLParser libxml2 glib
   ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description = "A database of common MIME types";
     homepage = http://freedesktop.org/wiki/Software/shared-mime-info;
